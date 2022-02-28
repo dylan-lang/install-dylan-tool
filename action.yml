@@ -1,0 +1,27 @@
+name: install-dylan-tool
+description: Install a specific version of dylan-tool
+inputs:
+  version:
+    type: string
+    # Is there a way to specify the latest released version?
+    # Updating this will get old quickly.
+    default: v0.4.1
+
+runs:
+  using: composite
+  steps:
+    - uses: dylan-lang/install-opendylan@v1
+
+    - uses: actions/checkout@v2
+      with:
+        repository: dylan-lang/dylan-tool
+        submodules: recursive
+        ref: ${{ inputs.version }}
+        path: dylan-tool
+
+    - name: Build dylan-tool
+      shell: bash
+      run: |
+        # Put dylan and dylan-compiler binaries in the path first.
+        PATH=${PWD}:$PATH make -C dylan-tool install
+        ln -s dylan-tool/_build/bin/dylan-tool dylan
