@@ -1,10 +1,9 @@
 name: install-dylan-tool
 description: Install a specific version of dylan-tool
 inputs:
-  version:
+  tag:
+    required: false
     type: string
-    # Is there a way to specify the latest released version?
-    # Updating this will get old quickly.
     default: v0.4.1
 
 runs:
@@ -16,7 +15,7 @@ runs:
       with:
         repository: dylan-lang/dylan-tool
         submodules: recursive
-        ref: ${{ inputs.version }}
+        ref: ${{ inputs.tag }}
         path: dylan-tool
 
     - name: Build dylan-tool
