@@ -1,0 +1,41 @@
+# To test changes to the install-dylan-tool Action we choose an arbitrary
+# project (pacman-catalog) to build and test.
+
+name: build-and-test
+
+on:
+  push:
+    # all branches
+  pull_request:
+    branches:
+      - main
+
+  # This enables the Run Workflow button on the Actions tab.
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+
+      - uses: dylan-lang/install-dylan-tool
+
+      - name: Create workspace
+        run: |
+          ./dylan new workspace pc
+
+      - uses: actions/checkout@v2
+        with:
+          repo: dylan-lang/pacman-catalog
+          path: pc/pacman-catalog
+
+      - name: Build pacman-catalog-test-suite
+        run: |
+          cd pc
+          DYLAN_CATALOG=./pacman-catalog ../dylan update
+          ../dylan-compiler -build -jobs 3 pacman-catalog-test-suite
+
+      - name: Run pacman-catalog-test-suite
+        run: |
+          cd pc
+          DYLAN_CATALOG=./pacman-catalog _build/bin/pacman-catalog-test-suite
