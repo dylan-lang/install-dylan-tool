@@ -1,5 +1,8 @@
 # To test changes to the install-dylan-tool Action we choose an arbitrary
-# project (pacman-catalog) to build and test.
+# project (pacman-catalog) to build and test. Unfortunately, this will only run
+# AFTER something is pushed to the "main" branch. Not sure how to fix that, but
+# it's not a big problem since no one will use it until a specific version is
+# tagged.
 
 name: build-and-test
 
