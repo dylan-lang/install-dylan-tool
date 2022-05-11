@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      - uses: dylan-lang/install-dylan-tool
+      - uses: dylan-lang/install-dylan-tool@main
 
       - name: Create workspace
         run: |
