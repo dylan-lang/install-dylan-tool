@@ -19,14 +19,15 @@ To install a specific released version:
         tag: v4.2.1
 ```
 
-`tag` must exactly match a tagged version in the dylan-tool repository.
+`tag` must exactly match a tagged version in the [dylan-tool
+repository](https://github.com/dylan-lang/dylan-tool).
 
 **Important:** This Action must be used **after**
 [actions/checkout@v2](https://github.com/actions/checkout) when using the
 default `path:` (i.e., the current directory) because `actions/checkout@v2`
 deletes everything in the repo directory first.
 
-When this Action has completed three artifacts exist in the current directory:
+When this Action has completed, three artifacts exist in the current directory:
 
 1.  A symbolic link to the `dylan` executable.
 
