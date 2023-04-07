@@ -8,23 +8,23 @@ invokes the
 To install the latest dylan-tool release:
 
 ```yaml
-    - uses: dylan-lang/install-dylan-tool@v1
+    - uses: dylan-lang/install-dylan-tool@v2
 ```
 
 To install a specific released version:
 
 ```yaml
-    - uses: dylan-lang/install-dylan-tool@v1
+    - uses: dylan-lang/install-dylan-tool@v2
       with:
-        tag: v4.2.1
+        tag: v1.2.3
 ```
 
 `tag` must exactly match a tagged version in the [dylan-tool
 repository](https://github.com/dylan-lang/dylan-tool).
 
 **Important:** This Action must be used **after**
-[actions/checkout@v2](https://github.com/actions/checkout) when using the
-default `path:` (i.e., the current directory) because `actions/checkout@v2`
+[actions/checkout@v3](https://github.com/actions/checkout) when using the
+default `path:` (i.e., the current directory) because `actions/checkout@v3`
 deletes everything in the repo directory first.
 
 When this Action has completed, three artifacts exist in the current directory:

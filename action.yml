@@ -1,17 +1,21 @@
+# Use this action if you need a version of dylan-tool newer than the one in the
+# most recent Open Dylan release.  Normally it shouldn't be necessary to use
+# this action since the install-opendylan action installs dylan-tool itself.
+
 name: install-dylan-tool
 description: Install a specific version of dylan-tool
 inputs:
   tag:
     required: false
     type: string
-    default: v0.5.0
+    default: v0.8.0
 
 runs:
   using: composite
   steps:
-    - uses: dylan-lang/install-opendylan@v1
+    - uses: dylan-lang/install-opendylan@v3
 
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         repository: dylan-lang/dylan-tool
         submodules: recursive
@@ -21,6 +25,8 @@ runs:
     - name: Build dylan-tool
       shell: bash
       run: |
+        # Remove the link install-opendylan@v3 creates itself.
+        rm -f dylan
         # Put dylan and dylan-compiler binaries in the path first.
-        PATH=${PWD}:$PATH make -C dylan-tool install
-        ln -s dylan-tool/_build/bin/dylan-tool dylan
+        PATH=${PWD}:$PATH DYLAN=${PWD} make -C dylan-tool install
+        ln -s install/dylan-tool/bin/dylan-tool-app dylan
