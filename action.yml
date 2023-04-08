@@ -20,13 +20,18 @@ runs:
         repository: dylan-lang/dylan-tool
         submodules: recursive
         ref: ${{ inputs.tag }}
+        # Must be under ${GITHUB_WORKSPACE}. We mv this below.
         path: dylan-tool
 
     - name: Build dylan-tool
       shell: bash
       run: |
+        TOP=$(realpath ${GITHUB_WORKSPACE}/..)
+        cd ${TOP}
         # Remove the link install-opendylan@v3 creates itself.
         rm -f dylan
-        # Put dylan and dylan-compiler binaries in the path first.
-        PATH=${PWD}:$PATH DYLAN=${PWD} make -C dylan-tool install
+        mv ${GITHUB_WORKSPACE}/dylan-tool .
+        DYLAN=${TOP} make -C dylan-tool install
         ln -s install/dylan-tool/bin/dylan-tool-app dylan
+        # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-system-path
+        echo "${PWD}" >> ${GITHUB_PATH}
