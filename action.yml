@@ -1,37 +1,31 @@
 # Use this action if you need a version of dylan-tool newer than the one in the
 # most recent Open Dylan release.  Normally it shouldn't be necessary to use
-# this action since the install-opendylan action installs dylan-tool itself.
+# this action since the install-opendylan action installs dylan-tool in its own
+# bin directory.
 
 name: install-dylan-tool
-description: Install a specific version of dylan-tool
+description: Install the dylan command-line tool
 inputs:
   tag:
     required: false
     type: string
-    default: v0.8.0
+    default: v0.11.0
 
 runs:
   using: composite
   steps:
     - uses: dylan-lang/install-opendylan@v3
 
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         repository: dylan-lang/dylan-tool
         submodules: recursive
         ref: ${{ inputs.tag }}
-        # Must be under ${GITHUB_WORKSPACE}. We mv this below.
         path: dylan-tool
 
-    - name: Build dylan-tool
+    - name: Build and install dylan-tool
       shell: bash
       run: |
-        TOP=$(realpath ${GITHUB_WORKSPACE}/..)
-        cd ${TOP}
-        # Remove the link install-opendylan@v3 creates itself.
-        rm -f dylan
-        mv ${GITHUB_WORKSPACE}/dylan-tool .
-        DYLAN=${TOP} make -C dylan-tool install
-        ln -s install/dylan-tool/bin/dylan-tool-app dylan
+        DYLAN=${GITHUB_WORKSPACE}/dylan-tool make -C dylan-tool install
         # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#adding-a-system-path
-        echo "${PWD}" >> ${GITHUB_PATH}
+        echo "${GITHUB_WORKSPACE}/dylan-tool/install/bin" >> ${GITHUB_PATH}
